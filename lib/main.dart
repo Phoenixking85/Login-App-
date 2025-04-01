@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'auth_provider.dart';
 import 'login_screen.dart';
 import 'profile_screen.dart';
+import 'splash_screen.dart';
 
 void main() {
   runApp(
@@ -17,17 +18,24 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<bool> _loginCheckFuture;
+  late final Future<bool> _loginCheckFuture;
 
   @override
   void initState() {
     super.initState();
+    _loginCheckFuture = _checkAuthStatus();
+  }
+
+  Future<bool> _checkAuthStatus() async {
+    await Future.delayed(Duration.zero);
+    if (!mounted) return false;
+
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    _loginCheckFuture = authProvider.checkLoginStatus();
+    return authProvider.checkLoginStatus();
   }
 
   @override
@@ -42,15 +50,16 @@ class _MyAppState extends State<MyApp> {
         future: _loginCheckFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
+            return const SplashScreen();
           }
 
-          if (snapshot.data == true) {
-            return const ProfileScreen();
+          if (snapshot.hasError) {
+            return const LoginScreen();
           }
-          return const LoginScreen();
+
+          return snapshot.data == true
+              ? const ProfileScreen()
+              : const LoginScreen();
         },
       ),
     );
