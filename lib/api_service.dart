@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'user_model.dart';
 
@@ -22,7 +23,7 @@ class ApiService {
       }
       return null;
     } catch (e) {
-      print('Login error: $e');
+      debugPrint('Login error: $e');
       return null;
     }
   }
@@ -39,7 +40,7 @@ class ApiService {
       }
       return [];
     } catch (e) {
-      print('Fetch products error: $e');
+      debugPrint('Fetch products error: $e');
       return [];
     }
   }

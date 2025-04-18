@@ -11,8 +11,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController(text: '');
-  final _passwordController = TextEditingController(text: '');
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void _login() async {
@@ -22,9 +22,11 @@ class _LoginScreenState extends State<LoginScreen> {
           _emailController.text, _passwordController.text);
 
       if (success) {
+        if (!mounted) return;
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (_) => const ProfileScreen()));
       } else {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login Failed')),
         );

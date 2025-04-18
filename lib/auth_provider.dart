@@ -28,7 +28,7 @@ class AuthProvider with ChangeNotifier {
         return true;
       }
     } catch (e) {
-      print('Login error: $e');
+      debugPrint('Login error: $e');
     }
 
     _isLoading = false;
@@ -45,9 +45,8 @@ class AuthProvider with ChangeNotifier {
       await prefs.setString('firstName', user.firstName);
       await prefs.setString('lastName', user.lastName);
       await prefs.setString('token', user.token ?? '');
-      await prefs.setBool('isLoggedIn', true);
     } catch (e) {
-      print('Error saving user to prefs: $e');
+      debugPrint('Error saving user to prefs: $e');
     }
   }
 
@@ -60,7 +59,7 @@ class AuthProvider with ChangeNotifier {
       _products = [];
       notifyListeners();
     } catch (e) {
-      print('Error during logout: $e');
+      debugPrint('Error during logout: $e');
     }
   }
 
@@ -85,7 +84,7 @@ class AuthProvider with ChangeNotifier {
       }
       return false;
     } catch (e) {
-      print('Error checking login status: $e');
+      debugPrint('Error checking login status: $e');
       return false;
     }
   }

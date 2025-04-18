@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:login_app/login_screen.dart';
+import 'package:login_app/profile_screen.dart';
 import 'package:provider/provider.dart';
 import 'auth_provider.dart';
-import 'login_screen.dart';
-import 'profile_screen.dart';
 import 'splash_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     ChangeNotifierProvider(
       create: (context) => AuthProvider(),
@@ -14,54 +15,23 @@ void main() {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  late final Future<bool> _loginCheckFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _loginCheckFuture = _checkAuthStatus();
-  }
-
-  Future<bool> _checkAuthStatus() async {
-    await Future.delayed(Duration.zero);
-    if (!mounted) return false;
-
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    return authProvider.checkLoginStatus();
-  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login Profile App',
+      title: 'My App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: FutureBuilder<bool>(
-        future: _loginCheckFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SplashScreen();
-          }
-
-          if (snapshot.hasError) {
-            return const LoginScreen();
-          }
-
-          return snapshot.data == true
-              ? const ProfileScreen()
-              : const LoginScreen();
-        },
-      ),
+      home: const SplashScreen(),
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/profile': (context) => const ProfileScreen(),
+      },
     );
   }
 }

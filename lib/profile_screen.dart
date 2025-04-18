@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'auth_provider.dart';
 import 'login_screen.dart';
-import 'user_model.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -10,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-    final User? user = authProvider.currentUser;
+    final user = authProvider.currentUser;
 
     return Scaffold(
       appBar: AppBar(
@@ -18,8 +17,9 @@ class ProfileScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () {
-              authProvider.logout();
+            onPressed: () async {
+              await authProvider.logout();
+              if (!context.mounted) return;
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (_) => const LoginScreen()));
             },
