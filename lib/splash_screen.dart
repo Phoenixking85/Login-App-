@@ -19,7 +19,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
-    // Add artificial delay to ensure splash screen is visible
     await Future.delayed(const Duration(seconds: 2));
 
     if (!mounted) return;
@@ -53,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/app_logo.png', // Replace with your logo asset
+                'assets/app_logo.png',
                 width: 150,
                 height: 150,
               ),
